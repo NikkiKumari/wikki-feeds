@@ -1,0 +1,67 @@
+html * {
+  line-height: 0.5;
+  color: '#2020131';
+  font-family: 'Leckerli One', cursive !important;
+}
+.App {
+  text-align: center;
+  background-color: #f0eef1;
+  height: 100%;
+  min-height: 100vh;
+  overflow:hidden;
+}
+
+.paper {
+  height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.main{
+  padding: 20px;
+  margin: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  height: 100px;
+}
+
+.container .span{
+  color: #999;
+  font-size: '14px';
+}
+
+.container .disconnect{
+  padding: 3px 5px;
+  font-size: 0.8125rem;
+  margin-left: 11px;
+  color: #999;
+  text-transform: capitalize;
+}
+.header {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px rgba(0,0,0,.5);
+}
+th{
+  font-weight: 700 !important;
+}
+.country{
+  fill: #ccc;
+  stroke: #999;
+}
+.geo-chart{
+  height: 720px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.field-set{
+    color: #787777;
+    margin: 0px !important;
+    padding: 12px 0px 0px 0px;
+    border: none;
+    text-align: left;
+}
