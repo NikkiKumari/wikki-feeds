@@ -1,5 +1,5 @@
 import React from "react";
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@material-ui/core";
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 
 export const ActionCount = (props) => {
 const {actions, header} = props;

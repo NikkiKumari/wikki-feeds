@@ -1,7 +1,7 @@
 html * {
   line-height: 0.5;
   color: '#2020131';
-  font-family: 'Leckerli One', cursive !important;
+  font-family: 'PT Sans' !important;
 }
 .App {
   text-align: center;
@@ -64,4 +64,19 @@ th{
     padding: 12px 0px 0px 0px;
     border: none;
     text-align: left;
+}
+.root {
+  width: '100%';
+  padding: 0
+}
+.inline {
+  display: 'inline';
+}
+.avatar{
+  width: 35;
+  height: 35
+}
+.summary{
+  color: #545252
+  
 }

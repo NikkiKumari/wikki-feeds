@@ -1,5 +1,5 @@
-import GetWebsocketData from './GetWebsocketData'
-import './App.css';
+import GetWebsocketData from './components/GetWebsocketData'
+import './styles/App.css';
 
 function App() {
   return (

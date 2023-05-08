@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
-import { Box, Grid, Paper, Button } from "@material-ui/core";
+import { Box, Grid, Paper, Button } from "@mui/material";
 import ActionCount from '../ActionCount'
-import Message from '../Message';
+import Message from '../ActivityFeed';
 import GeoChart from '../GeoChart';
 
 
@@ -12,9 +12,15 @@ const GetWebsocketData = () => {
     const [startTime, setStartTime] = useState('')
     const [isPaused, setPause] = useState(false);
     const [country, setCountry] = useState(null);
+    const [height, setHeight] = useState(null);
+    const [width, setWidth] = useState(null);
     const [countryCount, setCountryCount] = useState({});
     const ws = useRef(null);
 
+    // using this ref to get height and width for geochart to resize. 
+    const chartRef = useRef(null)
+
+    // connnect to webhook [ws://wikimon.hatnote.com:9000]
     const connectToWebHook = () => {
         ws.current = new WebSocket("ws://wikimon.hatnote.com:9000");
         ws.current.onopen = () => {
@@ -24,21 +30,25 @@ const GetWebsocketData = () => {
         ws.current.onclose = () => console.log("ws closed");
     }
 
+    // connect to webhook on component mount
     useEffect(() => {
         connectToWebHook();
         const wsCurrent = ws.current;
+        if (chartRef.current) {
+            setHeight(chartRef.current.offsetHeight)
+            setWidth(chartRef.current.offsetWidth)
+        }
         return () => {
             wsCurrent.close();
         };
     }, []);
 
-    
+    // update child component onmessage
     useEffect(() => {
         if (!ws.current) return;
         ws.current.onmessage = e => {
             if (isPaused) return;
             const message = JSON.parse(e.data);
-            console.log('e', JSON.stringify(message));
             const allActions = {...actions}
             const country_name = message?.geo_ip?.country_name
             if(country_name){
@@ -48,7 +58,7 @@ const GetWebsocketData = () => {
             setCountry(country_name) 
             allActions[message.action] = allActions[message.action] ? allActions[message.action]+1 : 1
             setActions(allActions)
-            data?.length > 100 ? setData(data.slice(-5)): setData([...data, message])
+            data?.length > 200 ? setData(data.slice(-5)): setData([...data, message])
         };
         }, [data, actions, isPaused, countryCount, country]);
 
@@ -73,17 +83,17 @@ const GetWebsocketData = () => {
             </div>
             <Grid
                 container
-                spacing={5}
+                spacing={2}
                 alignItems="center"
                 style={{ height: "100%" }}
             >
-                <Grid item xs={6}>
+                <Grid item xs={7}>
                 <fieldset className='field-set'>
                     <legend>Activity Feed</legend>
                     <Paper variant="outlined" className="paper">
                             {
                                 data && data.map(d => <Message 
-                                    key={d.rev_id}
+                                    key={`${d.rev_id}${d.user}`}
                                     message={d.summary}
                                     displayName={d.user}
                                     location={d.page_title}
@@ -94,7 +104,7 @@ const GetWebsocketData = () => {
                     </Paper>
                     </fieldset>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                 <fieldset className='field-set'>
                     <legend>Feed Action Counts</legend>
                     <Paper variant="outlined" className="paper">
@@ -102,15 +112,15 @@ const GetWebsocketData = () => {
                     </Paper>
                     </fieldset>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={7}>
                 <fieldset className='field-set'>
                     <legend>World Map Highlight Feed</legend>
-                    <Paper variant="outlined" className='geo-chart'>
-                        <GeoChart height={540} width={900} country={country} />
+                    <Paper variant="outlined" className='geo-chart' ref={chartRef}>
+                        <GeoChart height={height} width={width} country={country} />
                     </Paper>
                 </fieldset>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                 <fieldset className='field-set'>
                     <legend>Countries Feed Count</legend>
                     <Paper variant="outlined" className="geo-chart">
